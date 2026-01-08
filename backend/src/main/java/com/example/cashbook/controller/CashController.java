@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api")
 public class CashController {
 	@PostMapping("/addCash") // /api/addCash
 	public ResponseEntity<String> addCash() {

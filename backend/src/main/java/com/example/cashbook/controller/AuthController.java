@@ -48,7 +48,7 @@ public class AuthController {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword())); // 비밀번호 암호화 저장
-        user.setRole(request.getRole());
+        user.setRole("USER"); // 서버에 강제 고정
 
         // 3. DB 저장
         userService.insertUser(user);
