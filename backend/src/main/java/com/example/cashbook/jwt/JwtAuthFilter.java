@@ -51,7 +51,12 @@ public class JwtAuthFilter extends OncePerRequestFilter { // 유효 토큰 검�
                                    HttpServletResponse response,
                                    FilterChain filterChain)
             throws ServletException, IOException {
-
+    	
+    	if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+    		filterChain.doFilter(request, response);
+    		return;
+    	}
+    	
         // 1️⃣ 현재 요청 URL(경로) 읽기
         String path = request.getRequestURI();
 

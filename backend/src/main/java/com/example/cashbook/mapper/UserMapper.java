@@ -1,6 +1,7 @@
 package com.example.cashbook.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+
 import com.example.cashbook.dto.User;
 
 @Mapper
@@ -11,4 +12,6 @@ public interface UserMapper {
     void insertUser(User user);
     
     void updatePasswordByUsername(User user);
+    
+    void deleteById(Long userId);
 }

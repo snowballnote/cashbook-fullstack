@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.cashbook.mapper.UserStatsMapper">
+	<!-- 전체 회원 수 -->
+	<select id="countTotalUsers" resultType="int">
+		SELECT COUNT(*) 
+		FROM users
+	</select>
+	
+	<!-- 오늘 가입자 -->
+	<select id="countTodayUsers" resultType="int">
+		SELECT COUNT(*) 
+		FROM users 
+		WHERE DATE(created_at) = CURDATE()
+	</select>
+	
+	<!-- 어제 가입자 -->
+	<select id="countYesterdayUsers" resultType="int">
+		SELECT COUNT(*) 
+		FROM users 
+		WHERE DATE(created_at) = CURDATE() - INTERVAL 1 DAY 
+	</select>
+	
+	<!-- 이번달 가입자 -->
+	<select id="countThisMonthUsers" resultType="int">
+		SELECT COUNT(*) 
+		FROM users 
+		WHERE YEAR(created_at) = YEAR(CURDATE()) 
+			AND MONTH(created_at) = MONTH(CURDATE()) 
+	</select>
+	
+	<!-- 최근 7일 가입자 -->
+	<select id="countLast7Days"
+            resultType="com.example.cashbook.dto.DailyUserCount">
+    	SELECT 
+    		DATE(created_at) AS date, 
+    		COUNT(*) AS count 
+    	FROM users 
+    	WHERE created_at >= CURDATE() - INTERVAL 6 DAY 
+    	GROUP BY DATE(created_at) 
+    	ORDER BY date
+    </select>
+    
+</mapper>

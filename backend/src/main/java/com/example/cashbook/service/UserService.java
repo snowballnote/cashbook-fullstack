@@ -11,6 +11,7 @@ import com.example.cashbook.mapper.UserMapper;
 @Transactional
 public class UserService { // 회원가입
 	private final UserMapper userMapper;
+	
 	public UserService(UserMapper userMapper) {
 		this.userMapper = userMapper;
 	}
@@ -46,4 +47,8 @@ public class UserService { // 회원가입
 		// DB 업데이트
 		userMapper.updatePasswordByUsername(user);
 	}
+	
+	public void deleteUser(Long userId) {
+        userMapper.deleteById(userId);
+    }
 }
