@@ -43,7 +43,7 @@
 	<!-- 삭제 -->
 	<delete id="deleteById" parameterType="long">
 	    DELETE FROM users
-	    WHERE id = #{userId}
+	    WHERE id = #{id}
 	</delete>
 
 </mapper>

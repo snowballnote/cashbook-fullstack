@@ -48,7 +48,7 @@ public class UserService { // 회원가입
 		userMapper.updatePasswordByUsername(user);
 	}
 	
-	public void deleteUser(Long userId) {
-        userMapper.deleteById(userId);
+	public void deleteUser(int id) {
+        userMapper.deleteById(id);
     }
 }

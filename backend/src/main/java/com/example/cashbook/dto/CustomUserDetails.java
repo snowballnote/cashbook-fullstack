@@ -39,7 +39,8 @@ public class CustomUserDetails implements UserDetails { // SpringSecurity UserDe
         return user.getRole();
     }
 
-    public Long getId() {
-        return user.getId();
-    }
+	public int getId() {
+		return user.getId();
+	}
+
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class AdminUserListResponse {
-	private Long id;
+	private int id;
 	private String username;
 	private String role;
 	private LocalDateTime createdAt;

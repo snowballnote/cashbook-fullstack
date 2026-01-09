@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.cashbook.mapper.CashMapper">
+
+    <!-- 가계부 캘린더 (월별 집계) -->
+    <select id="selectMonthlyCalendar"
+            resultType="com.example.cashbook.dto.CashCalendarResponse">
+        SELECT
+            cash_date AS cashDate,
+            SUM(CASE WHEN kind = 'INCOME' THEN money ELSE 0 END) AS incomeTotal,
+            SUM(CASE WHEN kind = 'EXPENSE' THEN money ELSE 0 END) AS expenseTotal
+        FROM cash
+        WHERE id = #{id}
+          AND cash_date BETWEEN #{startDate} AND #{endDate}
+        GROUP BY cash_date
+        ORDER BY cash_date
+    </select>
+	
+	<!-- 상세 -->
+	<select id="selectDailyCash"
+	        resultType="com.example.cashbook.dto.CashDailyResponse">
+	
+	    SELECT
+	        cash_id   AS cashId,
+	        id        AS id,
+	        kind,
+	        money,
+	        memo,
+	        cash_date AS cashDate
+	    FROM cash
+	    WHERE id = #{id}
+	      AND cash_date = #{date}
+	    ORDER BY created_at ASC
+	</select>
+
+</mapper>

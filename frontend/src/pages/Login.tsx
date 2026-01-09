@@ -38,31 +38,49 @@ export default function Login() {
 
     return (
         <div className="page">
-        <div className="container">
-            <h1 className="page-title">로그인</h1>
+            <div className="container max-w-sm">
 
-            <input
-            className="input"
-            type="text"
-            placeholder="아이디"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            />
+                <h1 className="page-title text-center mb-2">
+                    로그인
+                </h1>
 
-            <input
-            className="input"
-            type="password"
-            placeholder="비밀번호"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            />
+                <p className="text-sm text-gray-500 text-center mb-6">
+                    가계부 서비스를 이용하려면 로그인하세요
+                </p>
 
-            <button className="button" onClick={handleLogin}>
-            로그인
-            </button>
+                <div className="space-y-3">
+                    <input
+                        className="input"
+                        type="text"
+                        placeholder="아이디"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
 
-            {msg && <div className="error-msg">{msg}</div>}
-        </div>
+                    <input
+                        className="input"
+                        type="password"
+                        placeholder="비밀번호"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+
+                    <button
+                        className="button mt-2"
+                        onClick={handleLogin}
+                    >
+                        로그인
+                    </button>
+                </div>
+
+                {msg && (
+                    <p className="error-msg text-center mt-4">
+                        {msg}
+                    </p>
+                )}
+
+            </div>
         </div>
     );
+
 }
