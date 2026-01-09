@@ -1,17 +1,18 @@
 package com.example.cashbook.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.example.cashbook.dto.User;
 
 @Mapper
 public interface UserMapper {
 
-    User findByUsername(String username);
+    User findByUsername(@Param("username") String username);
 
     void insertUser(User user);
     
     void updatePasswordByUsername(User user);
     
-    void deleteById(Long userId);
+    void deleteById(@Param("userId") Long userId);
 }

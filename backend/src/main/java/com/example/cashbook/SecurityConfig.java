@@ -38,7 +38,9 @@ public class SecurityConfig {
             		.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             		// swagger API명세서 출력 페이지 인증 없이 통과 허용
             		.requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
-                .requestMatchers("/auth/**").permitAll() 
+                .requestMatchers("/api/auth/**").permitAll() 
+                .requestMatchers("/api/users/**").permitAll() // 임시
+                
                 .anyRequest().authenticated() //  권한이 없는 접속시 403 응답
             )
             .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);

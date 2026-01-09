@@ -31,11 +31,11 @@ import jakarta.servlet.http.HttpServletResponse;
 // /a/ -> /b/ -> /view/
 // OncePerRequestFilter 로 한번 실행됐던 필터는 다시 사용하지 않음
 public class JwtAuthFilter extends OncePerRequestFilter { // 유효 토큰 검사
-
+	
     // JWT 검증, 파싱(정보 추출)을 담당하는 유틸 클래스
     // 이 클래스는 우리가 직접 만든 JwtUtil 이며, secret key 기반으로 토큰이 올바른지 검사함
     private final JwtUtil jwtUtil;
-
+    
     // 생성자: JwtUtil 을 주입받아서 사용
     // Spring Security 설정에서 new JwtAuthFilter(jwtUtil) 이런 식으로 만들어서 등록함
     public JwtAuthFilter(JwtUtil jwtUtil) {
@@ -52,6 +52,8 @@ public class JwtAuthFilter extends OncePerRequestFilter { // 유효 토큰 검�
                                    FilterChain filterChain)
             throws ServletException, IOException {
     	
+    	System.out.println("🔥 JwtAuthFilter path = " + request.getRequestURI());
+    	
     	if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
     		filterChain.doFilter(request, response);
     		return;
@@ -62,7 +64,7 @@ public class JwtAuthFilter extends OncePerRequestFilter { // 유효 토큰 검�
 
         // 2️⃣ "/auth/" 로 시작하는 요청은 토큰 검증을 하지 않는다. (로그인, 회원가입 API 등은 인증 불필요)
         // 예: /auth/login, /auth/signup 같은 요청
-        if (path.startsWith("/auth/")) {
+        if (path.startsWith("/api/auth/")) {
             filterChain.doFilter(request, response); // 다음 필터로 그냥 넘김
             return; // 여기서 필터 종료
         }
@@ -94,6 +96,11 @@ public class JwtAuthFilter extends OncePerRequestFilter { // 유효 토큰 검�
             // 토큰에 저장할 때 claim("role", "USER") 이런 식으로 넣어둔 값
             String role = claims.get("role", String.class);
 
+            
+            // 🔥 여기 붙이기 (①)
+            System.out.println("🔥 JWT username = " + username);
+            System.out.println("🔥 JWT role = " + role);
+            
             // 9️⃣ Spring Security가 이해할 수 있는 인증 객체 생성
             // UsernamePasswordAuthenticationToken(사용자정보, 비밀번호, 권한목록)
             // 비밀번호는 JWT 기반 인증이므로 null 로 넣음
@@ -108,6 +115,13 @@ public class JwtAuthFilter extends OncePerRequestFilter { // 유효 토큰 검�
             // 🔟 SecurityContext에 인증 정보 저장
             // 이후 요청 처리 동안 로그인된 사용자로 인식됨
             SecurityContextHolder.getContext().setAuthentication(auth);
+            
+            // 🔥 여기 붙이기 (②)
+            System.out.println(
+                "🔥 SecurityContext auth = " +
+                SecurityContextHolder.getContext().getAuthentication()
+            );
+            
 
         } catch (Exception e) {
             // 🚫 토큰 검증 실패 시 인증 정보 삭제

@@ -109,17 +109,24 @@ public class UsersController {
 	 * 회원탈퇴 (하드 삭제)
 	 */
 	@DeleteMapping("/me")
-	public ResponseEntity<Void> deleteMe(
-	    @AuthenticationPrincipal CustomUserDetails userDetails
-	) {
-	    if (userDetails == null) {
+	public ResponseEntity<Void> deleteMe(Authentication auth) {
+
+	    if (auth == null) {
 	        return ResponseEntity
 	                .status(HttpStatus.UNAUTHORIZED)
 	                .build();
 	    }
 
-	    userService.deleteUser(userDetails.getId());
+	    String username = auth.getName(); // JWT subject
+	    User user = userService.findByUsername(username);
+
+	    if (user == null) {
+	        return ResponseEntity
+	                .status(HttpStatus.NOT_FOUND)
+	                .build();
+	    }
+
+	    userService.deleteUser(user.getId());
 	    return ResponseEntity.noContent().build();
 	}
-
 }

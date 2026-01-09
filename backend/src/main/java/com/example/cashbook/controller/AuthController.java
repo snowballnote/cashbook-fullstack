@@ -18,7 +18,7 @@ import com.example.cashbook.service.UserService;
 
 @CrossOrigin // 외부에서 접근
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final UserService userService;
@@ -32,11 +32,12 @@ public class AuthController {
 
 	/**
      * 회원가입 API
-     * POST /auth/signup
+     * POST /api/auth/signup
      */
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody SignupRequest request) {
-    	System.out.println("/auth/signup");
+    	System.out.println("/api/auth/signup");
+    	String username = request.getUsername().trim();
         // 1. username 중복 검사
         if (userService.findByUsername(request.getUsername()) != null) {
             return ResponseEntity
@@ -46,7 +47,7 @@ public class AuthController {
 
         // 2. 사용자 객체 생성 및 비밀번호 암호화
         User user = new User();
-        user.setUsername(request.getUsername());
+        user.setUsername(username);
         user.setPassword(passwordEncoder.encode(request.getPassword())); // 비밀번호 암호화 저장
         user.setRole("USER"); // 서버에 강제 고정
 
@@ -65,8 +66,9 @@ public class AuthController {
      */
     @PostMapping("/login") // res.json()
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-    	System.out.println("/auth/login");	
-    	
+    	System.out.println("/api/auth/login");	
+    	String username = request.getUsername().trim();
+    	System.out.println("LOGIN username = [" + username + "]");
         // 1. 사용자 조회
         User user = userService.findByUsername(request.getUsername());
 
