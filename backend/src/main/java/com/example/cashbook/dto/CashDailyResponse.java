@@ -2,17 +2,17 @@ package com.example.cashbook.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
-@AllArgsConstructor
+@Data
 public class CashDailyResponse {
     private int cashId;
-    private int id;
     private String kind;
     private BigDecimal money;
     private String memo;
     private LocalDate cashDate;
+    
+    private List<String> hashtags;
 }

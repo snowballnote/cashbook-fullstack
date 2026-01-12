@@ -23,10 +23,12 @@ export default function CashCalendarGrid({
 
     const cells: React.ReactNode[] = [];
 
+    // 앞쪽 빈 칸
     for (let i = 0; i < firstDay; i++) {
         cells.push(<div key={`empty-${i}`} />);
     }
 
+    // 날짜 칸
     for (let day = 1; day <= lastDate; day++) {
         const date = `${month}-${String(day).padStart(2, "0")}`;
         const item = map.get(date);
@@ -35,12 +37,18 @@ export default function CashCalendarGrid({
             <div
                 key={date}
                 onClick={() => onSelectDate(date)}
-                className="border rounded p-2 h-24 text-sm cursor-pointer hover:bg-slate-100"
+                title="클릭하면 해당 날짜 내역을 조회합니다"
+                className="
+                    border rounded p-2 h-24 text-sm
+                    cursor-pointer
+                    hover:bg-slate-100
+                    transition-colors
+                "
             >
                 <div className="font-semibold">{day}</div>
 
                 {item && (
-                    <div className="mt-1 text-xs">
+                    <div className="mt-1 text-xs space-y-0.5">
                         {item.incomeTotal > 0 && (
                             <div className="amount-income">
                                 + {item.incomeTotal.toLocaleString()}
@@ -59,12 +67,14 @@ export default function CashCalendarGrid({
 
     return (
         <>
+            {/* 요일 */}
             <div className="grid grid-cols-7 text-center font-bold mb-2">
                 {["일", "월", "화", "수", "목", "금", "토"].map(d => (
                     <div key={d}>{d}</div>
                 ))}
             </div>
 
+            {/* 날짜 */}
             <div className="grid grid-cols-7 gap-1">
                 {cells}
             </div>

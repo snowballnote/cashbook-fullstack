@@ -1,25 +1,29 @@
 @import "tailwindcss";
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
-@theme {
-  --font-sans: "Pretendard", system-ui, sans-serif;
-}
-
 @layer base {
   body {
-    @apply bg-[#f5f6f8] text-[#111827] antialiased font-sans;
+    @apply bg-gray-50 text-gray-900 antialiased;
+    font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
   }
 }
-
 @layer components {
-  .input-base {
-    @apply w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-white 
-           focus:ring-2 focus:ring-black focus:border-transparent 
-           transition-all outline-none placeholder:text-gray-400;
+  .card {
+    @apply bg-white rounded-lg shadow-sm p-4;
   }
-
-  .btn-black {
-    @apply w-full bg-[#111827] text-white py-2.5 rounded-lg font-medium 
-           hover:bg-black transition-all shadow-sm cursor-pointer;
+  .nav {
+    @apply bg-white shadow-sm px-4 py-3;
+  }
+  .nav a {
+    @apply text-sm font-medium text-gray-700 hover:text-black mr-4;
+  }
+  .input-base {
+    @apply w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-white
+           focus:ring-2 focus:ring-gray-900 focus:border-transparent
+           outline-none;
+  }
+  .btn-primary {
+    @apply bg-gray-900 text-white py-2.5 rounded-lg font-medium
+          hover:bg-black transition;
   }
 }

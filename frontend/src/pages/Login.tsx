@@ -1,11 +1,11 @@
 import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Login({ onLogin }: { onLogin: () => void }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [msg, setMsg] = useState("");
-//   const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleLogin = () => {
         setMsg("");
@@ -31,16 +31,18 @@ export default function Login() {
             localStorage.setItem("username", data.username);
             localStorage.setItem("role", data.role);
 
-            window.location.reload();
+            onLogin();               // ✅ App 리렌더 트리거
+            navigate("/calendar", { replace: true });
         })
+
         .catch((err) => setMsg(err.message));
     };
 
     return (
-        <div className="page">
-            <div className="container max-w-sm">
+        <div className="flex justify-center">
+            <div className="w-full max-w-sm">
 
-                <h1 className="page-title text-center mb-2">
+                <h1 className="text-xl font-semibold text-center mb-2">
                     로그인
                 </h1>
 
@@ -50,7 +52,7 @@ export default function Login() {
 
                 <div className="space-y-3">
                     <input
-                        className="input"
+                        className="input-base"
                         type="text"
                         placeholder="아이디"
                         value={username}
@@ -58,7 +60,7 @@ export default function Login() {
                     />
 
                     <input
-                        className="input"
+                        className="input-base"
                         type="password"
                         placeholder="비밀번호"
                         value={password}
@@ -66,7 +68,7 @@ export default function Login() {
                     />
 
                     <button
-                        className="button mt-2"
+                        className="btn-primary w-full mt-2"
                         onClick={handleLogin}
                     >
                         로그인
@@ -74,7 +76,7 @@ export default function Login() {
                 </div>
 
                 {msg && (
-                    <p className="error-msg text-center mt-4">
+                    <p className="text-sm text-red-500 text-center mt-4">
                         {msg}
                     </p>
                 )}
@@ -82,5 +84,4 @@ export default function Login() {
             </div>
         </div>
     );
-
 }

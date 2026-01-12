@@ -12,14 +12,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 import com.example.cashbook.jwt.JwtAuthFilter;
 import com.example.cashbook.jwt.JwtUtil;
 import com.example.cashbook.service.UserService;
 
+
 @Configuration
 public class SecurityConfig {
-
+	
     private final JwtUtil jwtUtil;
     private final UserService userService;
 
@@ -27,10 +29,16 @@ public class SecurityConfig {
         this.jwtUtil = jwtUtil;
         this.userService = userService;
     }
+    
+
+	@Bean
+	public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+	    return new HiddenHttpMethodFilter();
+	}
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+    	System.out.println("===== SECURITY CONFIG LOADED =====");
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())

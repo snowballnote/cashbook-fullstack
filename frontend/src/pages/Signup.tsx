@@ -2,74 +2,84 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [msg, setMsg] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [msg, setMsg] = useState("");
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const handleSignup = async () => {
-    setMsg("");
+    const handleSignup = async () => {
+        setMsg("");
 
-    if (!username || !password) {
-      setMsg("아이디와 비밀번호를 입력해주세요.");
-      return;
-    }
+        if (!username || !password) {
+            setMsg("아이디와 비밀번호를 입력해주세요.");
+            return;
+        }
 
-    try {
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-          role: "USER",
-        }),
-      });
+        try {
+            const res = await fetch("/api/auth/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username,
+                    password,
+                    role: "USER",
+                }),
+            });
 
-      const text = await res.text();
+            const text = await res.text();
+            if (!res.ok) throw new Error(text || "회원가입 실패");
 
-      if (!res.ok) {
-        throw new Error(text || "회원가입 실패");
-      }
+            alert(text);
+            navigate("/login");
+        } catch (err: any) {
+            setMsg(err.message);
+        }
+    };
 
-      alert(text); // 회원가입 성공 메시지
-      navigate("/login");
+    return (
+        <div className="flex justify-center">
+            <div className="w-full max-w-sm">
 
-    } catch (err: any) {
-      setMsg(err.message);
-    }
-  };
+                <h1 className="text-xl font-semibold text-center mb-2">
+                    회원가입
+                </h1>
 
-  return (
-    <div className="page">
-      <div className="container">
-        <h1 className="page-title">회원가입</h1>
+                <p className="text-sm text-gray-500 text-center mb-6">
+                    가계부 서비스 회원가입
+                </p>
 
-        <input
-          type="text"
-          className="input"
-          placeholder="아이디"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+                <div className="space-y-3">
+                    <input
+                        className="input-base"
+                        type="text"
+                        placeholder="아이디"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
 
-        <input
-          type="password"
-          className="input"
-          placeholder="비밀번호"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+                    <input
+                        className="input-base"
+                        type="password"
+                        placeholder="비밀번호"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
 
-        <button className="button" onClick={handleSignup}>
-          회원가입
-        </button>
+                    <button
+                        className="btn-primary w-full mt-2"
+                        onClick={handleSignup}
+                    >
+                        회원가입
+                    </button>
+                </div>
 
-        {msg && <p className="error-msg">{msg}</p>}
-      </div>
-    </div>
-  );
+                {msg && (
+                    <p className="text-sm text-red-500 text-center mt-4">
+                        {msg}
+                    </p>
+                )}
+            </div>
+        </div>
+    );
 }

@@ -32,23 +32,31 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
+    	System.out.println("========== JWT FILTER START ==========");
+        System.out.println("METHOD = " + request.getMethod());
+        System.out.println("URI    = " + request.getRequestURI());
 
+        String header = request.getHeader("Authorization");
+        System.out.println("Authorization = " + header);
+    	    
         String path = request.getRequestURI();
 
         // OPTIONS 요청 패스
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+        	System.out.println("OPTIONS PASS");
             filterChain.doFilter(request, response);
             return;
         }
 
         // 인증 제외 경로
         if (path.startsWith("/api/auth/")) {
+        	System.out.println("AUTH API PASS");
             filterChain.doFilter(request, response);
             return;
         }
 
-        String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
+        	System.out.println("❌ NO JWT HEADER");
             filterChain.doFilter(request, response);
             return;
         }
@@ -58,8 +66,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             Claims claims = jwtUtil.validateToken(token);
             String username = claims.getSubject();
-
+            System.out.println("JWT OK, username = " + username);
+            
             User user = userService.findByUsername(username);
+            System.out.println("USER = " + user);
+            
             if (user == null) {
                 SecurityContextHolder.clearContext();
                 filterChain.doFilter(request, response);
@@ -70,18 +81,33 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(
-                            userDetails,          // ⭐ 핵심
+                            userDetails,          
                             null,
                             userDetails.getAuthorities()
                     );
-
+            auth.setDetails(userDetails);
+            
             SecurityContextHolder.getContext().setAuthentication(auth);
+            
+            System.out.println("AUTH SET = " +
+                    SecurityContextHolder.getContext().getAuthentication()
+                );
+                System.out.println("AUTHORITIES = " +
+                    SecurityContextHolder.getContext()
+                        .getAuthentication()
+                        .getAuthorities()
+                );
+                
 
         } catch (Exception e) {
+        	System.out.println("❌ JWT ERROR");
+        	 e.printStackTrace();
             SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
+        System.out.println("========== JWT FILTER END ==========");
+        
         System.out.println(
         		  SecurityContextHolder.getContext()
         		      .getAuthentication()

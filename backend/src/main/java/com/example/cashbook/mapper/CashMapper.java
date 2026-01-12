@@ -1,5 +1,6 @@
 package com.example.cashbook.mapper;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,6 +20,30 @@ public interface CashMapper {
 	
 	List<CashDailyResponse> selectDailyCash(
             @Param("id") int id,
-            @Param("date") LocalDate date
+            @Param("cashDate") LocalDate cashDate
     );
+	
+	int updateCash(
+		@Param("cashId") int cashId,
+		@Param("id") int id, 
+		@Param("cashDate") LocalDate cashDate, 
+		@Param("kind") String kind,
+		@Param("money") BigDecimal money,
+		@Param("memo") String memo		
+	);
+	
+	int deleteCash(
+		@Param("cashId") int cashId,
+		@Param("id") int id
+	);
+	
+	int insertCash(
+		@Param("id") int id, 
+		@Param("cashDate") LocalDate cashDate,
+	    @Param("kind") String kind,
+	    @Param("money") BigDecimal money,
+	    @Param("memo") String memo
+	);
+	
+	
 }

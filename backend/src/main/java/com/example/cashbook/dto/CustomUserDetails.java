@@ -43,4 +43,5 @@ public class CustomUserDetails implements UserDetails { // SpringSecurity UserDe
 		return user.getId();
 	}
 
+
 }
