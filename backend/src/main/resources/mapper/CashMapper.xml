@@ -52,8 +52,11 @@
 		  AND id = #{id}
 	</delete>
 	
-	<insert id="insertCash">
-		INSERT INTO cash (
+	<insert id="insertCash"
+	        parameterType="map"
+	        useGeneratedKeys="true"
+	        keyProperty="cashId">
+	    INSERT INTO cash (
 	        id,
 	        cash_date,
 	        kind,
@@ -67,5 +70,5 @@
 	        #{memo}
 	    )
 	</insert>
-	
+
 </mapper>

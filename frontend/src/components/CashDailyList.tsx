@@ -52,7 +52,9 @@ export default function CashDailyList({ date, onChanged }: Props) {
             kind: item.kind,
             money: String(item.money),
             memo: item.memo ?? "",
-            hashtags: "",
+            hashtags: item.hashtags
+                ? item.hashtags.map(tag => `#${tag}`).join(" ")
+                : "",
         });
     };
 

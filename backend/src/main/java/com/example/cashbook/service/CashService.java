@@ -3,9 +3,12 @@ package com.example.cashbook.service;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.cashbook.dto.CashCalendarResponse;
 import com.example.cashbook.dto.CashCreateRequest;
@@ -86,7 +89,7 @@ public class CashService {
         
         // 해시태그 처리
         // 기존 해시태그 전부 삭제
-        hashtagMapper.delelteByCashId(cashId);
+        hashtagMapper.deleteByCashId(cashId);
         
         // 새 해시태그 파싱
         List<String> tags = parseHashtags(req.getHashtags());
@@ -107,27 +110,7 @@ public class CashService {
     	}
     }
     
-    public void addCash(int id, CashCreateRequest req) {
-        System.out.println("🔥 SERVICE addCash HIT");
-        System.out.println("userId = " + id);
-        System.out.println("request = " + req);
-
-        int result = cashMapper.insertCash(
-            id,
-            req.getCashDate(),
-            req.getKind(),
-            req.getMoney(),
-            req.getMemo()
-        );
-
-        System.out.println("🔥 INSERT RESULT = " + result);
-
-        if (result != 1) {
-            throw new IllegalStateException("❌ cash insert 실패");
-        }
-    }
-
-    private List<String>  parseHashtags(String raw) {
+    private List<String> parseHashtags(String raw) {
         if (raw == null || raw.isBlank()) {
             return List.of();
         }
@@ -137,6 +120,29 @@ public class CashService {
             .filter(tag -> !tag.isBlank())
             .distinct()
             .toList();
+    }
+    
+    @Transactional
+    public void addCash(int id, CashCreateRequest req) {
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", id);
+        param.put("cashDate", req.getCashDate());
+        param.put("kind", req.getKind());
+        param.put("money", req.getMoney());
+        param.put("memo", req.getMemo());
+
+        cashMapper.insertCash(param);
+
+        Number key = (Number) param.get("cashId");
+        if (key == null) {
+            throw new IllegalStateException("cashId 생성 실패");
+        }
+        int cashId = key.intValue();
+
+        for (String tag : parseHashtags(req.getHashtags())) {
+            hashtagMapper.insertHashtag(cashId, tag);
+        }
     }
 
 }

@@ -91,6 +91,7 @@ export default function CashCalendar() {
                             {selectedDate} 내역
                         </h2>
                         <CashDailyList
+                            key={selectedDate} 
                             date={selectedDate}
                             onChanged={(newDate?: string) => {
                                 if (newDate) {

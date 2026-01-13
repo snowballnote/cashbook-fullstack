@@ -3,6 +3,7 @@ package com.example.cashbook.mapper;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -37,13 +38,5 @@ public interface CashMapper {
 		@Param("id") int id
 	);
 	
-	int insertCash(
-		@Param("id") int id, 
-		@Param("cashDate") LocalDate cashDate,
-	    @Param("kind") String kind,
-	    @Param("money") BigDecimal money,
-	    @Param("memo") String memo
-	);
-	
-	
+	int insertCash(Map<String, Object> param);
 }

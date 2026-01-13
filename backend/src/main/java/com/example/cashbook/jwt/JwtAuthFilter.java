@@ -101,18 +101,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
         	System.out.println("❌ JWT ERROR");
-        	 e.printStackTrace();
+            e.printStackTrace();
             SecurityContextHolder.clearContext();
+            filterChain.doFilter(request, response);
+            return; // ⭐⭐⭐ 핵심
         }
 
         filterChain.doFilter(request, response);
         System.out.println("========== JWT FILTER END ==========");
-        
-        System.out.println(
-        		  SecurityContextHolder.getContext()
-        		      .getAuthentication()
-        		      .getAuthorities()
-        		);
     }
     
 }
